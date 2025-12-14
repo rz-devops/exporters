@@ -14,7 +14,7 @@ services:
   ####### nginx for exporters ######
   #######################################
   nginx-exporters:
-    image: registry.docker.ir/nginx:1.29.0-alpine
+    image: nginx:alpine
     container_name: prom-nginx-exporters
     depends_on:
       - cadvisor
@@ -28,14 +28,14 @@ services:
       - exporters_net
       - web_net
     volumes:
-      - /data/services/exporters/nginx/configs/nginx.conf:/etc/nginx/nginx.conf
-      - /data/services/exporters/nginx/configs/htpasswd/:/home/
+      - /opt/exporters/nginx/configs/nginx.conf:/etc/nginx/nginx.conf
+      - /opt/exporters/nginx/configs/htpasswd/:/home/
 
   #######################################
   ############ node exporter ############  
   #######################################
   node-exporter:
-    image: registry.docker.ir/prom/node-exporter:latest
+    image: prom/node-exporter:latest
     container_name: prom-node-exporter
     hostname: node-exporter
     restart: unless-stopped
@@ -48,7 +48,7 @@ services:
   ############## cadvisor ###############
   #######################################
   cadvisor:
-    image: registry.docker.ir/google/cadvisor:latest
+    image: gcr.io/cadvisor/cadvisor:latest
     container_name: prom-cadvisor
     hostname: cadvisor
     restart: unless-stopped
@@ -65,7 +65,7 @@ services:
     networks:
       - exporters_net
   redis:
-    image: registry.docker.ir/redis:latest
+    image: redis:latest
     container_name: redis-cadvisor
     restart: unless-stopped
     #ports:
@@ -83,8 +83,9 @@ services:
     #ports:
     #  - 8585:8080
     volumes:
-      - /data/services/exporters/pipelines/config.yml:/etc/config.yml 
+      - /opt/exporters/pipelines/config.yml:/etc/config.yml 
     environment:
       GCPE_CONFIG: /etc/config.yml
     networks:
       - web_net
+

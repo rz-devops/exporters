@@ -21,7 +21,7 @@ services:
       - node-exporter
     restart: unless-stopped
     ports:
-      - 6000:80
+      - 6010:80
       - 6020:81
       - 6030:82
     networks:
